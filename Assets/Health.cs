@@ -24,23 +24,22 @@ namespace GAME.Core
             }
         }
 
-        //use when animator
-        /*         private void Die()
-                {
-                    if (isDead) return;
-
-                    isDead = true;
-                    GetComponent<Animator>().SetTrigger("die");
-                    GetComponent<ActionScheduler>().CancelCurrentAction();
-                } */
         private void Die()
         {
-            if (gameObject.CompareTag("Player"))
-            {
+            if (isDead) return;
 
-            }
-            Destroy(gameObject);
+            isDead = true;
+            GetComponent<Animator>().SetTrigger("die");
+            GetComponent<ActionScheduler>().CancelCurrentAction();
         }
+        /*         private void Die()
+                {
+                    if (gameObject.CompareTag("Player"))
+                    {
+
+                    }
+                    Destroy(gameObject);
+                } */
 
     }
 }

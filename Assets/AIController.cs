@@ -64,10 +64,10 @@ namespace GAME.Control
             {
                 FleeBehaviour();
             }
-            else if (Input.GetKeyDown(KeyCode.Space) && InRangeOfPlayer())
-            {
-                timeSinceArrivedAtWaypoint = timeDwelling + 1;
-            }
+            /*   else if (InRangeOfPlayer())
+               {
+                   timeSinceArrivedAtWaypoint = timeDwelling + 1;
+               }*/
             else if (timeSinceLastSawPredator < suspicionTime)
             {
                 SuspicionBehaviour();

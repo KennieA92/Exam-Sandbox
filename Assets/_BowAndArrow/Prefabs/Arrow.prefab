@@ -356,8 +356,8 @@ MonoBehaviour:
   m_ForceGravityOnDetach: 1
   m_RetainTransformParent: 0
   m_AttachPointCompatibilityMode: 0
-  speed: 1500
-  damage: 100
+  speed: 2000
+  damage: 10
 --- !u!114 &6072647748450659436
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,6 +1,6 @@
 ﻿using GAME.Core;
 using UnityEngine;
-
+[RequireComponent(typeof(Health))]
 public class Target : MonoBehaviour, IArrowHittable
 {
     public float forceAmount = 1.0f;
@@ -10,8 +10,8 @@ public class Target : MonoBehaviour, IArrowHittable
 
     public void Hit(Arrow arrow)
     {
-        ApplyMaterial();
-        ApplyForce(arrow);
+
+        //ApplyForce(arrow);
         health = GetComponent<Health>();
         health.TakeDamage(arrow.GetDamage());
         Debug.Log("hit");

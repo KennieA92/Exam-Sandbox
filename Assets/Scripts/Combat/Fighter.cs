@@ -38,7 +38,6 @@ namespace RPG.Combat
 
         private void AttackBehaviour()
         {
-
             transform.LookAt(target.transform);
             if (timeSinceLastAttack > timeBetweenAttacks)
             {

@@ -4,6 +4,8 @@ using GAME.Core;
 using GAME.Movement;
 using RPG.Combat;
 using UnityEngine;
+using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 namespace GAME.Control
 {
@@ -12,13 +14,12 @@ namespace GAME.Control
     public class PredatorController : MonoBehaviour
     {
         [SerializeField] float chaseDistance = 30f;
-        [SerializeField] float suspicionTime = 3f;
         [SerializeField] float aggroTime = 3f;
-        [SerializeField] PatrolPath patrolPath;
-        [SerializeField] float wayPointTolerance = 1f;
+        [SerializeField] float roamAreaTolerance = 1f;
         [SerializeField] float timeDwelling = 2f;
+        [SerializeField] float suspicionTime = 2f;
         [Range(0, 1)]
-        [SerializeField] float patrolSpeedFraction = 0.2f;
+        [SerializeField] float patrolSpeedFraction = 1f;
         Fighter fighter;
         Health health;
         Mover mover;
@@ -28,11 +29,9 @@ namespace GAME.Control
         GameObject player = null;
         float timeSinceLastSawSheep = Mathf.Infinity;
         float timeSinceLastAttacked = Mathf.Infinity;
-        float timeSinceArrivedAtWaypoint = Mathf.Infinity;
-        int currentWaypointIndex = 0;
-        float chargeTime = 0f;
+        float timeSinceArrivedToDwell = Mathf.Infinity;
 
-        Vector3 guardPosition;
+        Vector3 waitPosition;
 
         private void Start()
         {
@@ -40,18 +39,17 @@ namespace GAME.Control
             fighter = GetComponent<Fighter>();
             health = GetComponent<Health>();
             mover = GetComponent<Mover>();
-            guardPosition = transform.position;
+            waitPosition = transform.position;
             player = GameObject.FindWithTag("Player");
         }
 
         IEnumerator FindSheep()
         {
-            yield return new WaitForSeconds(10f);
-
-            sheep = GameObject.FindGameObjectsWithTag("Sheep");
-            chargeTime += Time.deltaTime * 1;
-            Debug.Log("Finding Sheep" + sheep.Length);
-
+            while (true)
+            {
+                sheep = GameObject.FindGameObjectsWithTag("Sheep");
+                yield return new WaitForSeconds(1f);
+            }
         }
 
         private void Update()
@@ -81,7 +79,7 @@ namespace GAME.Control
             }
             else
             {
-                PatrolBehaviour();
+                RoamBehaviour();
             }
 
             UpdateTimers();
@@ -89,43 +87,42 @@ namespace GAME.Control
 
         private void UpdateTimers()
         {
-            timeSinceArrivedAtWaypoint += Time.deltaTime;
+            timeSinceArrivedToDwell += Time.deltaTime;
             timeSinceLastSawSheep += Time.deltaTime;
             timeSinceLastAttacked += Time.deltaTime;
         }
 
-        private void PatrolBehaviour()
+        private float RangeToTarget(Vector3 position, Vector3 destination)
         {
-            Vector3 nextPoisition = guardPosition;
-            if (patrolPath != null)
+            return Vector3.Distance(position, destination);
+        }
+
+        private void RoamBehaviour()
+        {
+            if (RangeToTarget(transform.position, waitPosition) < roamAreaTolerance)
             {
-                if (AtWayPoint())
-                {
-                    timeSinceArrivedAtWaypoint = 0;
-                    CycleWaypoint();
-                }
-                nextPoisition = GetCurrentWaypoint();
+                Debug.Log("dwelling!");
+                timeSinceArrivedToDwell = 0;
+                SetWaitPosition();
             }
-            if (timeSinceArrivedAtWaypoint > timeDwelling)
+            if (timeSinceArrivedToDwell > timeDwelling)
             {
-                mover.StartMoveAction(nextPoisition, patrolSpeedFraction);
+                Debug.Log("grazing!");
+                mover.StartMoveAction(waitPosition, patrolSpeedFraction);
             }
         }
 
-        private Vector3 GetCurrentWaypoint()
+        private void SetWaitPosition()
         {
-            return patrolPath.GetWaypoint(currentWaypointIndex);
-        }
-        private void CycleWaypoint()
-        {
-            currentWaypointIndex = patrolPath.GetNextIndex(currentWaypointIndex);
+            float x = Random.Range(transform.position.x - roamAreaTolerance, transform.position.x + roamAreaTolerance);
+            float z = Random.Range(transform.position.z - roamAreaTolerance, transform.position.z + roamAreaTolerance);
+            if (NavMesh.SamplePosition(new Vector3(x, transform.position.y, z), out _, 1.0f, NavMesh.AllAreas))
+            {
+                waitPosition = new Vector3(x, transform.position.y, z);
+                Debug.Log("New Position!" + x + z);
+            }
         }
 
-        private bool AtWayPoint()
-        {
-            float distanceToWaypoint = Vector3.Distance(transform.position, GetCurrentWaypoint());
-            return distanceToWaypoint < wayPointTolerance;
-        }
 
         private void SuspicionBehaviour()
         {
@@ -156,7 +153,15 @@ namespace GAME.Control
                 distanceToSheep = Vector3.Distance(sheep[i].transform.position, transform.position);
                 if (distanceToSheep < chaseDistance)
                 {
-                    closeSheep = sheep[i];
+                    if (closeSheep == null)
+                    {
+                        closeSheep = sheep[i];
+                    }
+                    else if (Vector3.Distance(closeSheep.transform.position, transform.position) > Vector3.Distance(sheep[i].transform.position, transform.position))
+                    {
+                        closeSheep = sheep[i];
+                        Debug.Log("New Sheep!" + closeSheep);
+                    }
                     Debug.Log("Sheep!");
                     return distanceToSheep < chaseDistance;
                 }

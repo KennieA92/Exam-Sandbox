@@ -1925,7 +1925,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponDamage: 5
-  timeBetweenAttacks: 3
+  timeBetweenAttacks: 2
   weaponRange: 5
 --- !u!114 &528519144626800196
 MonoBehaviour:
@@ -1939,7 +1939,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f340b51a58c849a4497da002e611f0d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthPoints: 10
+  maxHealthPoints: 100
 --- !u!114 &528519144626800199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1952,7 +1952,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dee8d0d33f1e3f5478d88b6323d97f7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 5
+  maxSpeed: 10
 --- !u!114 &528519144626800198
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1966,11 +1966,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chaseDistance: 30
-  suspicionTime: 3
-  aggroTime: 3
+  aggroTime: 1
   patrolPath: {fileID: 0}
-  wayPointTolerance: 1
+  roamAreaTolerance: 30
   timeDwelling: 2
+  suspicionTime: 3
   patrolSpeedFraction: 1
 --- !u!195 &528519144626800193
 NavMeshAgent:

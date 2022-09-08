@@ -1,8 +1,10 @@
 using System;
+using System.Collections;
 using GAME.Core;
 using GAME.Movement;
 using RPG.Combat;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
@@ -34,6 +36,8 @@ namespace GAME.Control
         GameObject player;
         GameObject[] predators;
         GameObject closePredator = null;
+        GameObject[] bandits;
+        GameObject closeBandit = null;
         GameObject[] waterSources;
         GameObject closeWaterSource;
         float timeSinceLastSawPlayer = Mathf.Infinity;
@@ -52,10 +56,13 @@ namespace GAME.Control
             player = GameObject.FindWithTag("Player");
             mover = GetComponent<Mover>();
             predators = GameObject.FindGameObjectsWithTag("Predator");
+            bandits = GameObject.FindGameObjectsWithTag("Bandit");
             waterSources = GameObject.FindGameObjectsWithTag("Water");
             waitPosition = transform.position;
             guardPosition = transform.position;
+            StartCoroutine(FindThreats());
         }
+
         private void Update()
         {
             if (health.IsDead()) return;
@@ -71,6 +78,14 @@ namespace GAME.Control
             else if (timeSinceLastSawPredator < suspicionTime)
             {
                 SuspicionBehaviour();
+            }
+            else if (InRangeOfBandit() && InRangeOfPlayer())
+            {
+                FollowPlayerBehaviour();
+            }
+            else if (InRangeOfBandit())
+            {
+                FleeBehaviour();
             }
 
             else if (automaticPathing)
@@ -97,6 +112,15 @@ namespace GAME.Control
             UpdateTimers();
         }
 
+        IEnumerator FindThreats()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(1f);
+                predators = GameObject.FindGameObjectsWithTag("Predator");
+                bandits = GameObject.FindGameObjectsWithTag("Bandit");
+            }
+        }
 
         private void UpdateTimers()
         {
@@ -107,11 +131,25 @@ namespace GAME.Control
 
         private void FleeBehaviour()
         {
-            if (!closePredator) return;
-            Vector3 runTo = transform.position + ((transform.position - closePredator.transform.position));
+            if (closePredator == null && closeBandit == null) return;
+
+            if (closePredator)
+            {
+                Debug.Log("Afraid");
+                Vector3 runTo = transform.position + ((transform.position - closePredator.transform.position));
+                mover.StartMoveAction(runTo, 1f);
+            }
+            else if (closeBandit && InRangeOfPlayer())
+            {
+                mover.StartMoveAction(player.transform.position, 1f);
+                Debug.Log("Save me from the Bandit!");
+            }
+            else
+            {
+                Vector3 runTo = transform.position + ((transform.position - closeBandit.transform.position));
+                mover.StartMoveAction(runTo, 1f);
+            }
             timeSinceLastSawPredator = 0f;
-            Debug.Log("Afraid");
-            mover.StartMoveAction(runTo, 1f);
         }
 
         private void PatrolBehaviour()
@@ -167,9 +205,26 @@ namespace GAME.Control
                 if (distanceToPredator < fleeDistance)
                 {
                     closePredator = predators[i];
+                    Debug.Log("In range of Predator!" + closePredator.name);
                 }
             }
             return distanceToPredator < fleeDistance;
+        }
+
+        private bool InRangeOfBandit()
+        {
+            if (bandits == null) return false;
+            float distanceToBandit = Mathf.Infinity;
+            for (int i = 0; i < bandits.Length; i++)
+            {
+                if (bandits[i] == null) continue;
+                distanceToBandit = RangeToTarget(bandits[i].transform.position, transform.position);
+                if (distanceToBandit < fleeDistance)
+                {
+                    closeBandit = bandits[i];
+                }
+            }
+            return distanceToBandit < fleeDistance;
         }
 
         private bool InRangeOfPlayer()

@@ -53,7 +53,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7611457525573180312, guid: f7fa9336bacca6f4a8ecaa034a0ecc6a, type: 3}
       propertyPath: m_TagString
-      value: Untagged
+      value: Bandit
       objectReference: {fileID: 0}
     - target: {fileID: 9072087612821528980, guid: f7fa9336bacca6f4a8ecaa034a0ecc6a, type: 3}
       propertyPath: m_RootOrder
@@ -99,7 +99,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1164862401665295666, guid: f7fa9336bacca6f4a8ecaa034a0ecc6a, type: 3}
+    - {fileID: 2847690504066814817, guid: f7fa9336bacca6f4a8ecaa034a0ecc6a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: f7fa9336bacca6f4a8ecaa034a0ecc6a, type: 3}
 --- !u!1 &4922670676985505429 stripped
 GameObject:
@@ -120,7 +122,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &8175166664037087415
+--- !u!114 &5413839500582258242
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -129,7 +131,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 4922670676985505429}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33f059a81ccb8e449892aae3e51fbc24, type: 3}
+  m_Script: {fileID: 11500000, guid: 90281883018a8a848adee4469842070b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rightHandTransform: {fileID: 5308392757924819865}
+  leftHandTransform: {fileID: 5308392757924746139}
+  defaultWeapon: {fileID: 11400000, guid: bc03a068b09724d43902441a38a303d1, type: 2}
+--- !u!114 &2628685265616713442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4922670676985505429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48120639fc8ace0429be32848839ca21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   chaseDistance: 5
@@ -137,8 +154,6 @@ MonoBehaviour:
   patrolPath: {fileID: 0}
   wayPointTolerance: 1
   timeDwelling: 2
-  isAggressive: 0
-  fleeDistance: 20
   patrolSpeedFraction: 0.2
 --- !u!4 &5771087163164875929 stripped
 Transform:

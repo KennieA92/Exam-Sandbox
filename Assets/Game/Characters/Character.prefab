@@ -16,7 +16,6 @@ GameObject:
   - component: {fileID: 2830523714691021811}
   - component: {fileID: 507096209}
   - component: {fileID: 507096210}
-  - component: {fileID: 1164862401665295666}
   - component: {fileID: 4754025792574366135}
   m_Layer: 0
   m_Name: Character
@@ -134,7 +133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f340b51a58c849a4497da002e611f0d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthPoints: 100
+  maxHealthPoints: 100
 --- !u!195 &507096209
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -177,18 +176,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &1164862401665295666
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7611457525573180312}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a261a19cc40105d4395ba2ea5491091d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &4754025792574366135
 Rigidbody:
   m_ObjectHideFlags: 0

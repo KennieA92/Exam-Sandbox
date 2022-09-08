@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using GAME.Core;
 using GAME.Movement;
-using RPG.Combat;
+using GAME.Combat;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -154,6 +154,7 @@ namespace GAME.Control
 
         private void PatrolBehaviour()
         {
+            Debug.Log("Patrolling");
             Vector3 nextPoisition = guardPosition;
             if (patrolPath != null)
             {

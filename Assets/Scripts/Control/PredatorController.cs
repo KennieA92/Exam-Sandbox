@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using GAME.Core;
 using GAME.Movement;
-using RPG.Combat;
+using GAME.Combat;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
@@ -107,7 +107,7 @@ namespace GAME.Control
             }
             if (timeSinceArrivedToDwell > timeDwelling)
             {
-                Debug.Log("grazing!");
+                Debug.Log("roaming!");
                 mover.StartMoveAction(waitPosition, patrolSpeedFraction);
             }
         }

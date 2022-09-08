@@ -1,23 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using GAME.Movement;
 using System;
 using GAME.Core;
-using GAME.Movement;
 
 namespace GAME.Combat
 {
 
-    public class Fighter : MonoBehaviour, IAction
+    public class BanditFighter : MonoBehaviour, IAction
     {
+        [SerializeField] Transform rightHandTransform = null;
+        [SerializeField] Transform leftHandTransform = null;
+        [SerializeField] Weapon defaultWeapon = null;
 
-        [SerializeField] float weaponDamage = 5f;
-        [SerializeField] float timeBetweenAttacks = 3f;
-        [SerializeField] float weaponRange = 3f;
         Health target;
         float timeSinceLastAttack = Mathf.Infinity;
+        Weapon currentWeapon = null;
         private void Start()
         {
+            EquipWeapon(defaultWeapon);
         }
 
         private void Update()
@@ -26,6 +28,8 @@ namespace GAME.Combat
             if (target == null || target.IsDead()) return;
             if (!GetIsInRange())
             {
+
+                print("Not In Range");
                 GetComponent<Mover>().MoveTo(target.transform.position, 1f);
             }
             else
@@ -35,11 +39,19 @@ namespace GAME.Combat
             }
         }
 
+        public void EquipWeapon(Weapon weapon)
+        {
+            print("EquipWeapon");
+            currentWeapon = weapon;
+            Animator animator = GetComponent<Animator>();
+            currentWeapon.Spawn(rightHandTransform, leftHandTransform, animator);
+        }
 
         private void AttackBehaviour()
         {
+
             transform.LookAt(target.transform);
-            if (timeSinceLastAttack > timeBetweenAttacks)
+            if (timeSinceLastAttack > currentWeapon.GetTimeBetweenAttacks())
             {
                 //This will trigger the Hit() event.
 
@@ -52,22 +64,19 @@ namespace GAME.Combat
         {
             GetComponent<Animator>().ResetTrigger("stopAttack");
             GetComponent<Animator>().SetTrigger("attack");
-
-            // Delete and move to HIT when we got an animation
-            if (target == null) return;
-            else
-            {
-                target.TakeDamage(weaponDamage);
-            }
         }
 
         // Animation Event - Called from the animator
         void Hit()
         {
             if (target == null) return;
+            if (currentWeapon.HasProjectile())
+            {
+                currentWeapon.LaunchProjectile(rightHandTransform, leftHandTransform, target);
+            }
             else
             {
-                target.TakeDamage(weaponDamage);
+                target.TakeDamage(currentWeapon.GetWeaponDamage());
             }
         }
 
@@ -78,14 +87,13 @@ namespace GAME.Combat
 
         private bool GetIsInRange()
         {
-            return Vector3.Distance(target.transform.position, transform.position) < weaponRange;
+            return Vector3.Distance(target.transform.position, transform.position) < currentWeapon.GetWeaponRange();
         }
 
         public void Attack(GameObject combatTarget)
         {
             GetComponent<ActionScheduler>().StartAction(this);
             target = combatTarget.GetComponent<Health>();
-            print("Take that!");
         }
 
         public bool CanAttack(GameObject combatTarget)
@@ -93,6 +101,11 @@ namespace GAME.Combat
             if (combatTarget == null) return false;
             Health targetToTest = combatTarget.GetComponent<Health>();
             return targetToTest != null && !targetToTest.IsDead();
+        }
+
+
+        public void StartAction()
+        {
         }
 
         public void CancelAction()
@@ -104,8 +117,8 @@ namespace GAME.Combat
 
         private void StopAttack()
         {
-            /*           GetComponent<Animator>().ResetTrigger("attack");
-                      GetComponent<Animator>().SetTrigger("stopAttack"); */
+            GetComponent<Animator>().ResetTrigger("attack");
+            GetComponent<Animator>().SetTrigger("stopAttack");
         }
 
         public void StartAction(Vector3 destination, float speed)

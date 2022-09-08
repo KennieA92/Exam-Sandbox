@@ -156,7 +156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dee8d0d33f1e3f5478d88b6323d97f7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 6
+  maxSpeed: 10
 --- !u!114 &8724227642102928384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,6 +184,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chaseDistance: 5
   playerDistance: 10
+  seekWaterDistance: 10
   suspicionTime: 3
   patrolPath: {fileID: 9188197368174898236, guid: 49f7c377f87c21f4a81f375113a1471d, type: 3}
   dwellTolerance: 5
@@ -191,6 +192,7 @@ MonoBehaviour:
   fleeDistance: 20
   automaticPathing: 1
   patrolSpeedFraction: 1
+  thirst: 100
 --- !u!114 &7022192680016716516
 MonoBehaviour:
   m_ObjectHideFlags: 0

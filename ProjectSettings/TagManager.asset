@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Predator
   - Sheep
+  - Water
   layers:
   - Default
   - TransparentFX

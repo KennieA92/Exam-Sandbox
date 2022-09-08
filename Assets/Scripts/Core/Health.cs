@@ -6,12 +6,23 @@ namespace GAME.Core
 {
     public class Health : MonoBehaviour
     {
-        [SerializeField] float healthPoints = 100f;
+        public float maxHealthPoints = 100f;
+        private float healthPoints;
         bool isDead = false;
+
+        private void Start()
+        {
+            healthPoints = maxHealthPoints;
+        }
 
         public bool IsDead()
         {
             return isDead;
+        }
+
+        public float GetHealth()
+        {
+            return healthPoints;
         }
 
         public void TakeDamage(float damage)

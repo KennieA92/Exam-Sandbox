@@ -241,6 +241,10 @@ namespace GAME.Control
                 mover.StartMoveAction(player.transform.position, 1f);
                 timeSinceLastSawPlayer = 0f;
             }
+            else
+            {
+                mover.CancelAction();
+            }
         }
 
         private void SetWaitPosition()
@@ -261,10 +265,10 @@ namespace GAME.Control
             {
                 Debug.Log("dwelling!");
                 timeSinceArrivedToDwell = 0;
-                SetWaitPosition();
             }
             if (timeSinceArrivedToDwell > timeDwelling)
             {
+                SetWaitPosition();
                 Debug.Log("grazing!");
                 mover.StartMoveAction(waitPosition, patrolSpeedFraction);
             }

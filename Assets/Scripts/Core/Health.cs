@@ -42,7 +42,7 @@ namespace GAME.Core
             isDead = true;
             if (GetComponent<Animator>() == null)
             {
-                Destroy(gameObject);
+                //Destroy(gameObject);
             }
             else
             {

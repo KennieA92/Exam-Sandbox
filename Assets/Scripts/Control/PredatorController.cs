@@ -24,8 +24,8 @@ namespace GAME.Control
         Health health;
         Mover mover;
         //Guards Momory
-        GameObject[] sheep;
-        GameObject closeSheep = null;
+        GameObject[] livestocks;
+        GameObject closeLivestock = null;
         GameObject player = null;
         float timeSinceLastSawSheep = Mathf.Infinity;
         float timeSinceLastAttacked = Mathf.Infinity;
@@ -35,7 +35,7 @@ namespace GAME.Control
 
         private void Start()
         {
-            StartCoroutine(FindSheep());
+            StartCoroutine(FindLivestock());
             fighter = GetComponent<Fighter>();
             health = GetComponent<Health>();
             mover = GetComponent<Mover>();
@@ -43,15 +43,16 @@ namespace GAME.Control
             player = GameObject.FindWithTag("Player");
         }
 
-        IEnumerator FindSheep()
+        IEnumerator FindLivestock()
         {
             while (true)
             {
-                sheep = GameObject.FindGameObjectsWithTag("Sheep");
+                livestocks = GameObject.FindGameObjectsWithTag("Sheep");
                 yield return new WaitForSeconds(1f);
             }
         }
 
+        // Should probably be in FixedUpdate to ensure that physics have been calculated.
         private void Update()
         {
             if (health.IsDead()) return;
@@ -67,10 +68,10 @@ namespace GAME.Control
                 AttactBehaviour(player);
             }
 
-            else if (InAttackRangeOfSheep() && fighter.CanAttack(closeSheep))
+            else if (InAttackRangeOfSheep() && fighter.CanAttack(closeLivestock))
             {
                 timeSinceLastSawSheep = 0;
-                AttactBehaviour(closeSheep);
+                AttactBehaviour(closeLivestock);
             }
             else if (timeSinceLastSawSheep < suspicionTime)
             {
@@ -143,27 +144,29 @@ namespace GAME.Control
             return distanceToPlayer < (chaseDistance / 2);
         }
 
+        // Currently not working properly.
         private bool InAttackRangeOfSheep()
         {
-            if (sheep == null) return false;
-            float distanceToSheep = 30f;
-            for (int i = 0; i < sheep.Length; i++)
+            if (livestocks == null) return false;
+            float distanceToLivestock = 30f;
+            for (int i = 0; i < livestocks.Length; i++)
             {
-                if (!sheep[i]) continue;
-                distanceToSheep = Vector3.Distance(sheep[i].transform.position, transform.position);
-                if (distanceToSheep < chaseDistance)
+                if (!livestocks[i]) continue;
+                distanceToLivestock = Vector3.Distance(livestocks[i].transform.position, transform.position);
+                if (distanceToLivestock < chaseDistance)
                 {
-                    if (closeSheep == null)
+                    if (closeLivestock == null)
                     {
-                        closeSheep = sheep[i];
+                        closeLivestock = livestocks[i];
                     }
-                    else if (Vector3.Distance(closeSheep.transform.position, transform.position) > Vector3.Distance(sheep[i].transform.position, transform.position))
-                    {
-                        closeSheep = sheep[i];
-                        Debug.Log("New Sheep!" + closeSheep);
-                    }
+                    // Currently not working properly. 
+                    //if (Vector3.Distance(closeLivestock.transform.position, transform.position) > distanceToLivestock)
+                    //{
+                    //    closeLivestock = livestocks[i];
+                    //    Debug.Log("New Sheep!" + closeLivestock);
+                    //}
                     Debug.Log("Sheep!");
-                    return distanceToSheep < chaseDistance;
+                    return distanceToLivestock < chaseDistance;
                 }
             }
             return false;

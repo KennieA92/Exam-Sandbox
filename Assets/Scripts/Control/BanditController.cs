@@ -1,9 +1,11 @@
 
 using System;
+using System.Collections;
 using GAME.Combat;
 using GAME.Core;
 using GAME.Movement;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace GAME.Control
 {
@@ -18,19 +20,23 @@ namespace GAME.Control
         [SerializeField] float timeDwelling = 2f;
         [Range(0, 1)]
         [SerializeField] float patrolSpeedFraction = 0.2f;
+        [SerializeField] GameObject goal;
         BanditFighter fighter;
         Health health;
         Mover mover;
-        //Guards Momory
+        //Bandits Momory
+        GameObject[] livestocks;
+        GameObject closeLivestock = null;
         GameObject player;
         float timeSinceLastSawPlayer = Mathf.Infinity;
         float timeSinceArrivedAtWaypoint = Mathf.Infinity;
         int currentWaypointIndex = 0;
-
+        bool handsFree = true;
         Vector3 guardPosition;
 
         private void Start()
         {
+            StartCoroutine(FindLivestock());
             fighter = GetComponent<BanditFighter>();
             health = GetComponent<Health>();
             player = GameObject.FindWithTag("Player");
@@ -40,11 +46,13 @@ namespace GAME.Control
         private void Update()
         {
             if (health.IsDead()) return;
-            Debug.Log("Not Dead");
-            Debug.Log(fighter.CanAttack(player));
-            Debug.Log(InAttackRangeOfPlayer());
 
-            if (InAttackRangeOfPlayer() && fighter.CanAttack(player))
+            if (!handsFree)
+            {
+                FleeBehaviour();
+
+            }
+            else if (InAttackRangeOfPlayer() && fighter.CanAttack(player))
             {
                 Debug.Log("Found Player");
                 AttackBehaviour();
@@ -54,6 +62,11 @@ namespace GAME.Control
                 Debug.Log("Suspicious");
                 SuspicionBehaviour();
             }
+            else if (InRangeOfSheep() && handsFree)
+            {
+                StealSheep();
+            }
+
             else
             {
                 PatrolBehaviour();
@@ -61,6 +74,23 @@ namespace GAME.Control
 
             UpdateTimers();
         }
+
+        private void FleeBehaviour()
+        {
+            if (goal == null) return;
+            if (closeLivestock == null) return;
+            mover.MoveTo(goal.transform.position, 1f);
+        }
+
+        IEnumerator FindLivestock()
+        {
+            while (true)
+            {
+                livestocks = GameObject.FindGameObjectsWithTag("Sheep");
+                yield return new WaitForSeconds(1f);
+            }
+        }
+
 
         private void UpdateTimers()
         {
@@ -118,6 +148,51 @@ namespace GAME.Control
             float distanceToPlayer = Vector3.Distance(player.transform.position, transform.position);
             print(distanceToPlayer);
             return distanceToPlayer < chaseDistance;
+        }
+
+        private bool InRangeOfSheep()
+        {
+            if (livestocks == null) return false;
+            float distanceToLivestock = 30f;
+            for (int i = 0; i < livestocks.Length; i++)
+            {
+                if (!livestocks[i]) continue;
+                distanceToLivestock = Vector3.Distance(livestocks[i].transform.position, transform.position);
+                if (distanceToLivestock < chaseDistance)
+                {
+                    if (closeLivestock == null)
+                    {
+                        closeLivestock = livestocks[i];
+                    }
+                    // Currently not working properly. 
+                    //if (Vector3.Distance(closeLivestock.transform.position, transform.position) > distanceToLivestock)
+                    //{
+                    //    closeLivestock = livestocks[i];
+                    //    Debug.Log("New Sheep!" + closeLivestock);
+                    //}
+                    return distanceToLivestock < chaseDistance;
+                }
+            }
+            return false;
+        }
+
+        private void StealSheep()
+        {
+            if (closeLivestock == null) return;
+            if (Vector3.Distance(transform.position, closeLivestock.transform.position) < 2f)
+            {
+                closeLivestock.GetComponent<Health>().TakeDamage(41143413f);
+                closeLivestock.GetComponent<Rigidbody>().isKinematic = true;
+                closeLivestock.GetComponent<NavMeshAgent>().enabled = false;
+                closeLivestock.transform.SetParent(transform);
+                closeLivestock.transform.localPosition = new Vector3(0.65f, 1.9f, 0);
+
+                handsFree = false;
+            }
+            else
+            {
+                mover.StartMoveAction(closeLivestock.transform.position, 1f);
+            }
         }
 
         private void OnDrawGizmosSelected()

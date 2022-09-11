@@ -189,8 +189,8 @@ MonoBehaviour:
     y: 0
     width: 557.3333
     height: 912
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 201, y: 221}
+  m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 13}
   m_Panes:
   - {fileID: 13}
@@ -243,8 +243,8 @@ MonoBehaviour:
     y: 912
     width: 2112
     height: 395.33337
-  m_MinSize: {x: 100, y: 100}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 101, y: 121}
+  m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 17}
   m_Panes:
   - {fileID: 16}
@@ -503,9 +503,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 31.721226, y: -37.15648, z: -30.122051}
+    m_Target: {x: 42.34591, y: -26.332169, z: -193.20563}
     speed: 2
-    m_Value: {x: 31.721226, y: -37.15648, z: -30.122051}
+    m_Value: {x: 42.34591, y: -26.332169, z: -193.20563}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -552,13 +552,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.51510537, y: -0.29655513, z: 0.18303101, w: 0.784151}
+    m_Target: {x: 0.031595085, y: -0.9773463, z: 0.18648854, w: 0.10354}
     speed: 2
-    m_Value: {x: 0.5144005, y: -0.2974825, z: 0.18365003, w: 0.78305113}
+    m_Value: {x: 0.03156822, y: -0.97651535, z: 0.18632999, w: 0.103451975}
   m_Size:
-    m_Target: 79.201416
+    m_Target: 69.58045
     speed: 2
-    m_Value: 79.201416
+    m_Value: 69.58045
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -614,9 +614,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: ee620000
-      m_LastClickedID: 25326
-      m_ExpandedIDs: ceecffff8eedffff5af2ffff4af9ffff2cfbffff84620000
+      m_SelectedIDs: 4af9ffff
+      m_LastClickedID: -1718
+      m_ExpandedIDs: 6a86ffff1888ffff2a8fffff5898ffff8699ffff449affff30adffffb0adffff5eafffff5cb0ffffa0b2ffffb8b2ffff76b6ffff8eb6ffff3cb8ffff80cbffff38d1ffff78d1ffff0ee2ffff76eaffff3aefffff4cf0ffff44f1ffff84f1ffffa2f3ffff4af9ffff2cfbffff84620000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -871,21 +871,21 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts/Control
+    - Assets/Game/Characters
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Scripts/Control
+  - Assets/Game/Characters
   m_LastFoldersGridSize: -1
   m_LastProjectPath: D:\Unity Project Games\Exam-Sandbox
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 61.666626}
-    m_SelectedIDs: 926a0000
-    m_LastClickedID: 27282
+    m_SelectedIDs: 6a6a0000
+    m_LastClickedID: 27242
     m_ExpandedIDs: 00000000b0690000b2690000b4690000b6690000b8690000ba690000bc690000be690000c0690000c2690000c4690000c6690000c8690000ca690000cc690000ce690000d0690000d2690000d4690000d6690000d86900007e6a000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -939,9 +939,9 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 4af9ffff
-    m_LastClickedInstanceID: -1718
-    m_HadKeyboardFocusLastEvent: 1
+    m_SelectedInstanceIDs: 2a9affff
+    m_LastClickedInstanceID: -26070
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: c62300005a7700005c770000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
